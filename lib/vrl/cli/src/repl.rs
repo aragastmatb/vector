@@ -8,7 +8,6 @@ use rustyline::hint::{Hinter, HistoryHinter};
 use rustyline::validate::{self, MatchingBracketValidator, ValidationResult, Validator};
 use rustyline::{Context, Editor, Helper};
 use std::borrow::Cow::{self, Borrowed, Owned};
-use stdlib::all as funcs;
 use vrl::{diagnostic::Formatter, state, Runtime, Target, Value};
 
 const HELP_TEXT: &str = r#"
@@ -189,7 +188,7 @@ impl Repl {
 fn initial_hints() -> Vec<&'static str> {
     let mut hints: Vec<&'static str> = Vec::with_capacity(stdlib::all().len());
 
-    let mut func_names = funcs()
+    let mut func_names = stdlib::all()
         .iter()
         .map(|f| f.identifier())
         .collect::<Vec<&'static str>>();
@@ -289,7 +288,7 @@ fn print_function_list() {
 
     let mut func_table = Table::new();
     func_table.set_format(table_format);
-    funcs()
+    stdlib::all()
         .chunks(num_columns)
         .map(|funcs| {
             // Because it's possible that some chunks are only partial, e.g. have only two Some(_)
